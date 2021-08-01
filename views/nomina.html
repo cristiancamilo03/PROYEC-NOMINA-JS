@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Nomina</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/CSS" href="../assets/css/nominas.css" />
+    <link rel="shortcut icon" type="image/ico" href="../assets/images/contabilidad.png" />
+    <script src="https://kit.fontawesome.com/11509ce6e2.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous" />
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand">
+            <img src="../assets/images/factura.png" width="30" height="30" class="d-inline-block align-top" alt="" /> Sistema de Nomina
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+                <li class="nav-item active">
+                    <a class="nav-link" href="nominaEmpleados.html">Consultar Empleados</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="nominaResultados.html">Nomina Empleados</a>
+                </li>
+            </ul>
+        </div>
+        <ul class="nav navbar-nav ">
+            <button class="btn btn-info" id="cerrarSes">Cerrar Sesión</button>
+    </nav>
+    <form class="formConsulta">
+        <div class="title">
+            <h2>NOMINA EMPLEADOS</h2>
+        </div>
+        <div class="content">
+            <div class="animated fadeIn">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <label for="cedula">Cedula</label>
+                                <input type="number" name="cedula" id="cedula" placeholder="Ingrese la cedula del empleado" min="8" class="form-control" required pattern="[0-9]" /><br />
+
+                                <label for="nombreEmp">Nombre Empleado</label>
+                                <input type="text" name="nombreE" id="nombreE" placeholder="Ingrese el nombre del empleado" class="form-control" required /><br />
+
+                                <label for="SueldoEmp">Sueldo Empleado</label>
+                                <input type="number" name="sueldoE" id="sueldoE" placeholder="Ingrese el sueldo del empleado" class="form-control" value="908256" min="908256" /><br />
+
+                                <label for="diasTra">Dias Trabajados</label>
+                                <input type="number" name="diasT" id="diasT" placeholder="Ingrese los dias trabajados " class="form-control " required /><br />
+
+                                <label for="HED">Horas Extras Diurnas</label>
+                                <input type="number" name="horasExtraD" id="horasExtraD" placeholder="Ingrese las horas extras duirnas del empleado " class="form-control " required /><br />
+
+                                <label for="HEN">Horas Extras Nocturnas</label>
+                                <input type="number" name="horasExtraN " id="horasExtraN" placeholder="Ingrese las horas extras nocturnas del empleado " class="form-control " required /><br />
+
+                                <label for="HEDD ">Horas Extras Diurnas Dominicales</label>
+                                <input type="number" name="horasExtraDD" id="horasExtraDD" placeholder="Ingrese las horas extras duirnas dominicales del empleado " class="form-control " required /><br />
+
+                                <label for="HEND">Horas Extras Nocturnas Dominicales</label>
+                                <input type="number" name="horasExtraND" id="horasExtraND" placeholder="Ingrese las horas extras nocturnas dominicales del empleado " class="form-control " required /><br />
+
+                                <label for="HRN">Horas Recargo Nocturno</label>
+                                <input type="number" name="recargoN" id="recargoN" placeholder="Ingrese las horas de recargo nocturno del empleado " class="form-control " required /><br />
+                                <div class="alertaUser" id="alertaUser"></div>
+                                <center>
+                                    <button id="btnAgregar" type="button " class="btn btn-info "><i class="far fa-plus-square "></i>&nbsp;Crear</button>
+                                    <button id="verEmpleados" type="button " class="btn btn-dark "><i class="fas fa-file-invoice "></i>&nbsp;Ver Empleados</button>
+                                    <button id="btnEliminar" type="button " class="btn btn-danger " data-toggle="modal "><i class="far fa-trash-alt "></i>&nbsp;Eliminar</button>
+                                </center>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="modal fade " id="empleadosEliminar " tabindex="-1 " role="dialog " aria-labelledby="exampleModalLabel " aria-hidden="true ">
+        <div class="modal-dialog " role="document ">
+            <div class="modal-content ">
+                <div class="modal-header ">
+                    <h5 class="modal-title " id="exampleModalLabel "></h5>
+                    <button type="button " class="close " data-dismiss="modal " aria-label="Close "><span
+                            aria-hidden="true ">&times;</span>
+                    </button>
+                </div>
+                <form id="form " method="POST ">
+                    <div class="form-group ">
+                        <span class="abs-center "></span>
+                        <label for="codigoFactura " class="control-label "><strong>Codigo Empleado</strong></label>
+                        <input type="number " name="idEmpleadoEliminar " id="idEmpleadoEliminar " placeholder="Ingrese el Codigo de Empleado " class="form-control " required /><br />
+                    </div>
+                    <div class="modal-footer ">
+                        <button class="btn btn-success" type="button" name="btnEliminarEmp" id="btnEliminarEmp">Eliminar</button>
+                        <button type="button" class="btn btn-outline-info my-2 my-sm-0" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bd-example-modal-lg" id="empleadosEditar" tabindex="-1 " role="dialog" aria-labelledby="exampleModalLabel " aria-hidden="true ">
+        <div class="modal-dialog modal-dialog-centered modal-lg " role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel "></h5>
+                    <button type="button" class="close" data-dismiss="modal " aria-label="Close"><span
+                            aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form id="form" method="POST">
+                    <div class="form-group">
+                        <span class="abs-center"></span>
+                        <label for="producto">Codigo Nomina</label>
+                        <input type="text" name="codNomina " id="codNomina" class="form-control" readonly onmousedown="return false; " />
+                    </div>
+                    <div class="form-group">
+                        <span class="abs-center"></span>
+                        <label for="producto">Cedula</label>
+                        <input type="number" name="cedulaEmp" id="cedulaEmp" placeholder="Ingrese la cedula " min="8" max="11" class="form-control " readonly onmousedown="return false; " />
+                    </div>
+                    <div class="form-group">
+                        <span class="abs-center "></span>
+                        <label for="especificacionP ">Nombre Empleado</label>
+                        <input type="text" name="nombreEmp" id="nombreEmp" placeholder="Ingrese el nombre del empleado " class="form-control " required />
+                    </div>
+                    <div class="form-group">
+                        <span class="abs-center"></span>
+                        <label for="producto">Sueldo Empleado</label>
+                        <input type="number" name="sueldoEmp" value="908256" min="908256" id="sueldoEmp" placeholder="Ingrese el sueldo del empleado " class="form-control " />
+                    </div>
+                    <div class="form-group">
+                        <span class="abs-center"></span>
+                        <label for="especificacionP">Dias Trabajados</label>
+                        <input type="number" name="diasTrabajados" id="diasTrabajados" placeholder="Ingrese los dias trabajados " class="form-control " required />
+                    </div>
+                    <div class="form-group">
+                        <span class="abs-center"></span>
+                        <label for="especificacionP">Horas Extras Diurnas</label>
+                        <input type="number" name="horasExD" id="horasExD" placeholder="Ingrese las horas extra diurnas " class="form-control " required />
+                    </div>
+                    <div class="form-group ">
+                        <span class="abs-center "></span>
+                        <label for="especificacionP ">Horas Extras Nocturnas</label>
+                        <input type="number" name="horasExN" id="horasExN" placeholder="Ingrese las horas extra nocturnas " class="form-control " required />
+                    </div>
+                    <div class="form-group">
+                        <span class="abs-center"></span>
+                        <label for="especificacionP">Horas Extras Diurnas Dominicales</label>
+                        <input type="number" name="horasExDD" id="horasExDD" placeholder="Ingrese las horas extra diurnas dominicales " class="form-control " required />
+                    </div>
+                    <div class="form-group">
+                        <span class="abs-center"></span>
+                        <label for="especificacionP">Horas Extras Nocturnas Dominicales</label>
+                        <input type="number" name="horasExND" id="horasExND" placeholder="Ingrese las horas extra nocturnas dominicales " class="form-control " required />
+                    </div>
+                    <div class="form-group">
+                        <span class="abs-center"></span>
+                        <label for="especificacionP">Horas Recargo Nocturno</label>
+                        <input type="number" name="horasRecN" id="horasRecN" placeholder="Ingrese las horas de recargo nocturno " class="form-control " required />
+                    </div>
+                    <div class="alertaUser1" id="alertaUser1"></div>
+                    <div class="modal-footer">
+                        <center>
+                            <button class="btn btn-success" type="button" name="EditarEmp" id="EditarEmp">Editar</button>
+                            <button type="button" class="btn btn-info my-2 my-sm-0" data-dismiss="modal">Cancelar</button>
+                        </center>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <form id="empleadosList" class="formConsulta">
+        <div class="title">
+            <h2>EMPLEADOS</h2>
+        </div>
+        <div class="content">
+            <div class="animated fadeIn">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-hover border-primary" id="table" border="2" width="100% ">
+                                        <thead class="bg-primary">
+                                            <tr>
+                                                <th id="idFactura">id Nomina</th>
+                                                <th id="idFactura">Cedula</th>
+                                                <th id="nombreProducto">Nombre</th>
+                                                <th id="valorPedido">Sueldo Mensual</th>
+                                                <th id="precioConIva">Dias</th>
+                                                <th id="valorPedido">Horas Extras D</th>
+                                                <th id="valorPedido">Horas Extras N</th>
+                                                <th id="valorPedido">HEDD</th>
+                                                <th id="valorPedido">HEDN</th>
+                                                <th id="valorPedido">Horas Recargo N</th>
+                                                <th id="valorPedido">Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tabla">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/underscore@1.13.1/underscore-umd-min.js "></script>
+    <script src="https://cdn.jsdelivr.net/npm/underscore@1.13.1/underscore-esm-min.js "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.5.3/jspdf.min.js "></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.6/jspdf.plugin.autotable.min.js "></script>
+    <script src="../assets/jquery/jquery-3.3.1.min.js "></script>
+    <script src="../assets/popper/popper.min.js "></script>
+    <script src="../assets/bootstrap/js/bootstrap.min.js "></script>
+    <script src="../assets/js/crearNomina.js "></script>
+    <script src="../assets/js/consultarNomina.js "></script>
+    <script src="../assets/js/accionesNomina.js "></script>
+
+</body>
+
+</html>
